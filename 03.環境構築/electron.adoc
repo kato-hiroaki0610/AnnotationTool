@@ -1,0 +1,252 @@
+# Node.js
+
+### Node.jsのインストール
+* Node.js(v.14.15.4)をダウンロードする
+** https://nodejs.org/download/release/v14.15.4/
+* ダウンロードしてきた、zipファイルを展開し、展開したフォルダにパスを設定する
+* コマンドプロンプトを起動し、以下のように表示されていれば成功
+```
+$ node -v
+v14.15.4
+$ npm -v
+6.14.10
+```
+
+### package.jsonが存在する場合
+* package.jsonがすでに存在する場合は以下を実行して残りはスキップする
+```
+$ npm install --save-dev
+```
+
+### package.jsonの作成
+* プロジェクトのフォルダに移動し以下のコマンドを実行
+```
+$ npm init
+```
+* 作成するプロジェクトの基本情報を入力する
+```
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (src)
+version: (1.0.0)
+description: AnnotationTool for Electron
+entry point: (index.js)
+test command:
+git repository: https://github.com/kato-hiroaki0610/AnnotationTool
+keywords:
+author:
+license: (ISC)
+About to write to E:\project\AnnotationTool\20.開発\AnnotationTool\src\package.json:
+
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "AnnotationTool for Electron",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kato-hiroaki0610/AnnotationTool.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kato-hiroaki0610/AnnotationTool/issues"
+  },
+  "homepage": "https://github.com/kato-hiroaki0610/AnnotationTool#readme"
+}
+
+Is this OK? (yes) yes
+```
+
+### Electronのインストール
+* 以下のコマンドでElectronをインストールする
+```
+$ npm install --save-dev electron
+```
+* グローバルインストールを行うとElectronのアップデート時に動かなくなる可能性があるようなので、ローカルインストールを行う
+
+* Packaginを行うために `electron-packager` をインストールする
+```
+$ electron-packager
+```
+
+### Electronの起動
+* `index.html` `index.js` が存在すれば、以下のコマンドでElectronが起動できる
+```
+$ electron .
+```
+* ローカルインストールした場合だと以下のコマンドでないと起動できないと書いてあったが、普通に `$ electron .` で起動できた
+```
+$ .\node_modules\.bin\electron .
+```
+
+### Packaging
+* 以下のコマンドでPackgingができる
+```
+$ npx electron-packager . AnnotationTool --platform=win32 --arch=x64 --overwrite
+```
+
+### テストライブラリ
+* karma + mocha + chai を使用する
+** karma ブラウザでテストを実行してくれる
+** mocha BDD/TDDの書き方でテストケースを記述できる
+** chai 様々なテストの為のアサーション機能を提供してくれる
+
+* テスト用のディレクトリを作成し、移動する
+```
+$ mkdir tests && cd tests
+$ mkdir UT
+```
+
+* 以下のコマンドでインストールする
+** ブラウザ上だと `require` が使えないので、解消できるように `webpack` もインストールしておく
+```
+$ npm install --save-dev karma karma-webpack karma-chrome-launcher karma-electron webpack
+```
+
+* `karma.conf.js` を作成する
+** Karmaの動作にはkarma.conf.jsという設定ファイルが必要、これは直接ファイルを作成してもよいが、コマンドからウィザードで作成する事も可能、今回はウィザードを利用します
+```
+$ node_module/.bin/karma init
+```
+
+* はじめにテストフレームワークを聞かれるからmochaを選択する
++
+気をつけたいのはタブで切り替えるという事
+```
+Which testing framework do you want to use ?
+Press tab to list possible options. Enter to move to the next question.
+> mocha
+```
+
+* Require.jsを使うかきかれるのでnoを選択。
+```
+Do you want to use Require.js ?
+This will add Require.js plugin.
+Press tab to list possible options. Enter to move to the next question.
+> no
+```
+
+* ブラウザの選択、Chromeを選んでエンター。空白のままでもう一度エンター
+```
+Do you want to capture a browser automatically ?
+Press tab to list possible options. Enter empty string to move to the next question.
+> Chrome
+>
+```
+
+* jsファイルの置き場所、テストファイルの置き場を指定する
+```
+What is the location of your source and test files ?
+You can use glob patterns, eg. "js/*.js" or "test/**/*Spec.js".
+Enter empty string to move to the next question.
+> 'tests/**/**test.js'
+>
+```
+
+* 除外するファイルを指定する、空白でエンター
+```
+Should any of the files included by the previous patterns be excluded ?
+You can use glob patterns, eg. "**/*.swp".
+Enter empty string to move to the next question.
+> 
+```
+
+ファイルが変更されたら自動的にKarmaでテストする
+```
+Do you want Karma to watch all the files and run the tests on change ?
+Press tab to list possible options.
+> yes
+```
+* とするとkarma.conf.jsが作成される
+
+* `mocha`と`karma-mocha` をインストールする
+```
+$ npm install mocha --save-dev
+$ npm install karma-mocha --save-dev
+```
+
+* `karma-chai` をインストールする
+```
+$ npm install karma-chai --save-dev
+```
+
+* webpackの設定を行う
+```
+$ touch webpack.config.js
+```
+
+* `webpack.config.js` の設定は以下
+'use strict';
+
+module.exports = {
+    entry: {
+        app: './src/index.js'
+    },
+    output: {
+        path: `${__dirname}/dist`,
+        filename: '[name].bundle.js'
+    },
+    resolve: {
+        extensions: ['.ts', '.js'],
+    }
+};
+```
+
+* `karma.conf.js` を編集する
+```
+preprocessors: {
+    'tests/**/**test.js': ['webpack']
+},
+webpack:  {
+    mode: "none",
+},
+```
+
+* 以下のコマンドを実行すると、ブラウザが立ち上がってテストを始める
+```
+$ node_module/.bin/karma start
+```
+
+https://kinjouj.github.io/2013/09/karma-mocha-chai.html
+https://niwaringo.tumblr.com/post/76965802435/%E5%B0%8F%E3%81%95%E3%81%8Fkarma%E3%81%A8mocha%E3%81%A7%E3%83%86%E3%82%B9%E3%83%88%E7%92%B0%E5%A2%83%E3%82%92%E6%95%B4%E3%81%88%E3%82%8B
+
+### e2eテストライブラリ
+* Spectronを使用する
+```
+$ npm install --save-dev spectron
+```
+
+* テストファイルの作成
+```
+$ mkdir tests/e2e
+$ touch tests/e2e/spectron_test.js
+```
+
+* 以下のコマンドで実行できる
+```
+$ node path/to/spectron_test
+```
+
+* 参考:https://ics.media/entry/13082/
+
+### タスクランナー
+* package.jsonの `scripts` を以下のように変更する
+```
+"scripts": {
+  "start": "electron .",
+  "build": "npx electron-packager . AnnotationTool --platform=win32 --arch=x64 --overwrite",
+  "test": "node_modules/.bin/karma start"
+},
+```
