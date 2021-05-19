@@ -1,0 +1,76 @@
+<canvas id="canvas" width="512" height="512"></canvas>
+<style>
+    #canvas {
+        border: solid 1px black;
+    }
+</style>
+<script>
+
+window.onload = () => {
+    const canvas = document.querySelector('canvas');
+    const context = canvas.getContext('2d');
+
+    const image = new Image();
+    image.src = 'lena.jpg';
+    image.onload = () => {
+        console.log('onload')
+        context.drawImage(image, 0, 0, image.width, image.height, 0, 0, image.width, image.height);
+    };  
+
+    // To List
+    var leftTopX;
+    var leftTopY;
+    var rightBottomX;
+    var rightBottomY;
+
+    canvas.addEventListener('mousemove', drawPosition);
+    canvas.addEventListener('mousedown', getLeftTop);
+    canvas.addEventListener('mouseup', getRightBottom);
+
+    function drawImage(image) {
+        context.drawImage(image, 0, 0, image.width, image.height, 0, 0, image.width, image.height);
+    }
+
+    function getPosition() {
+        const x = event.pageX - canvas.offsetLeft;
+        const y = event.pageY - canvas.offsetTop;
+
+        return [x, y];
+    }
+
+    function drawPosition() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        drawImage(image);
+
+        if (rightBottomX !== null) {
+            console.log(leftTopX);
+            console.log(rightBottomX);
+
+            drawRectangle();
+        }
+
+        const [x, y] = getPosition();
+        context.fillText(x + ':' + y, 5, 10);
+    }
+
+    function getLeftTop() {
+        const [x, y] = getPosition();
+        leftTopX = x;
+        leftTopY = y;
+    }
+
+    function getRightBottom() {
+        const [x, y] = getPosition();
+        rightBottomX = x - leftTopX;
+        rightBottomY = y - leftTopY;
+
+        drawRectangle();
+    }
+
+    function drawRectangle() {
+        context.fillRect(leftTopX, leftTopY, rightBottomX, rightBottomY);
+    }
+}
+
+
+</script>

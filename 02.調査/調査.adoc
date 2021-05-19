@@ -1,0 +1,16 @@
+## 開発環境
+- Node.js
+- Electron
+- VisualStudioCode
+
+- 画像処理、Canvasを使えば実現できそう
+
+## 簡単な実装を行った
+- position.html
+- 四角描画の際の制御や複数描画できるように考慮する必要があるが、やりたいことはできそう
+-- あと本番では、Node + Electron
+
+## 参考になりそう
+https://mebee.info/2020/10/06/post-19719/
+https://weblike-curtaincall.ssl-lolipop.jp/blog/?p=590
+https://y-stream.blogspot.com/2013/02/jscanvas.html#sub3
