@@ -1,0 +1,87 @@
+@startuml
+title クラス図
+
+class fileOperater
+{
+    fileName: string
+    filePath: string
+    setFilePath()
+    getFilePath()
+    saveFile()
+}
+
+abstract class fileReader
+{
+    readContents()
+    getContents()
+}
+
+abstract class fileWriter
+{
+    writeContents()
+}
+
+fileOperater --> fileReader
+fileOperater --> fileWriter
+
+class csvReader
+{
+    readContents()
+    getContents()
+}
+
+class csvWriter
+{
+    writeContents()
+}
+
+class tagFileReader
+{
+    readContents()
+    getContents()
+}
+
+class tagFileWriter
+{
+    createTagFile()
+    writeContents()
+}
+
+class imageReader
+{
+    imageFilesPath: List<string>
+    currentImage: string
+    addImages()
+    setCurrentImage()
+    getCurrentImage()
+    viewImage()
+}
+
+class imageDirectoryReader
+{
+    currentDirectory: string
+    getDirectory()
+    drawCurrentDirectory()
+}
+
+class tagOperator
+{
+
+}
+
+class position
+{
+    drawPositin()
+}
+
+class region
+{
+    drawRegion()
+}
+
+fileReader --|> csvReader
+fileReader --|> tagFileReader
+fileWriter --|> csvWriter
+fileWriter --|> tagFileWriter
+
+@enduml
