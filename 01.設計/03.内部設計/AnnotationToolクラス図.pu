@@ -7,6 +7,7 @@ class fileOperater
     filePath: string
     setFilePath()
     getFilePath()
+    createFile()
     saveFile()
 }
 
@@ -43,39 +44,60 @@ class tagFileReader
 
 class tagFileWriter
 {
-    createTagFile()
+    currentTagFile: string
     writeContents()
 }
 
 class imageReader
 {
-    imageFilesPath: List<string>
-    currentImage: string
+    imageFileNames: List<string>
+    currentImage: image
+    currentImageName: string
+    currentImageIndex: int
     addImages()
-    setCurrentImage()
-    getCurrentImage()
-    viewImage()
+    setCurrentImageInfo()
+    getCurrentImageInfo()
+    drawImage()
+    drawZoomImage()
 }
+
+fileOperater --> imageReader
 
 class imageDirectoryReader
 {
     currentDirectory: string
+    setDirectory()
     getDirectory()
     drawCurrentDirectory()
 }
 
 class tagOperator
 {
-
+    tags: List<string>
+    tagFileReader: tagFileReader
+    tagFileWriter: tagFileWriter
+    addTag()
+    removeTag()
 }
 
 class position
 {
-    drawPositin()
+    x: int
+    y: int
+    setPosition()
+    getPosition()
+    getCurrentMousePosition()
+    drawPosition()
 }
 
 class region
 {
+    leftTopPosition: position
+    rightBottomPosition: position
+    regions: List<List<position>>
+    addRegion()
+    removeRegion()
+    getClickRegion()
     drawRegion()
 }
 
